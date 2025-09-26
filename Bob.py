@@ -1,5 +1,6 @@
 import streamlit as st
 import ollama
+import config
 
 #function to load the css styling
 def load_css(file_path):
@@ -8,7 +9,6 @@ def load_css(file_path):
 
 #call the function to load the styling
 load_css("Styling/style.css") 
-
 
 MODEL = 'llama3.1:8b' #this is the model we are using
 
@@ -19,17 +19,15 @@ with st.sidebar:
     st.markdown("What does this do?")
     st.button("+ New Chat")
 
-
-#initializes the messages
+#initializes the messages with the system prompt
 if 'messages' not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [{"role": "system","content": config.SYSTEM_MESSAGE}]
 
 #for all the messages we have in the session state --> display the message content
 for message in st.session_state["messages"]:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-
+    if message["role"] != "system":
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
 
 def generate_response():
