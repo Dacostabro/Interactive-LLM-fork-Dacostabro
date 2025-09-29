@@ -25,8 +25,8 @@ with st.sidebar:
 #initializes the messages with the system prompt
 if 'messages' not in st.session_state:
     st.session_state.messages = [{"role": "system","content": config.SYSTEM_MESSAGE}]
-
-
+    with st.chat_message("assistant", avatar="Assets/smiley.jpg"):
+        st.session_state.messages.append({'role': 'assistant', 'content': 'Hello! I am Bob. Please let me know how I can best assist you today.'}) #have the chatbot initiate conversation
 
 #for all the messages we have in the session state --> display the message content
 for message in st.session_state["messages"]:
