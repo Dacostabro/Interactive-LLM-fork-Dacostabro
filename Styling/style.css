@@ -14,35 +14,94 @@
     background-color: #1F1F24;
 }
 
+
+/*|||||||||||||||||||||||||||||||||Sidebar Styling Section|||||||||||||||||||||||||||||||||*/
 /*Colors the sidebar*/
-[data-testid="stSidebar"] {
+[data-testid="stSidebar"]{
     background-color: #294A7B;
     width: 600px;
 }
 
-
-[data-testid="stButton"] {
-    background-color: #5A739C;
-    color: #FFFDFE;
-    border-radius: 8px;
-    border: 2px solid #E7EFFF;
-    padding: 0.25em 1em;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    [data-testid="stMarkdownContainer"]{
-        background-color: #5A739C;
-        color: #FFFDFE;
-        border: none;
-        padding: none;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-
+/*Styling the header for the sidebar*/
+[data-testid="stSidebar"] h1 {
+        font-size: 40px; 
     }
+
+/*Clear Button Bottom Positioning */
+.st-key-clear_chat_button button{
+    position: fixed;
+    bottom: 1%;    
 }
 
 
+/*Button Styling*/
+div.stButton > button{
+    background: #5A739C;
+    color: #FFFDFE;
+    border-radius: 8px;
+    border: 2px solid #E7EFFF;
+    padding: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 200px;
+}
 
+div.stButton > button:hover{
+    background: #5A739C;
+    border: 4px solid #E7EFFF;
+
+}
+
+/*|||||||||||||||||||||||||||||||||Sidebar Styling Section End|||||||||||||||||||||||||||||||||*/
+
+/*
+[data-testid="stChatInput"]{
+    border-radius: 30px;
+    border: 2px solid #E7EFFF;
+    width: 800px;
+    justify-self: flex-center;
+    margin-right: auto;
+    margin-left: auto;  
+    outline: none;  
+}
+*/
+
+div.stChatInput{
+    border-radius: 30px;
+    border: 2px solid #E7EFFF;
+    width: 800px;
+    justify-self: flex-center;
+    margin-right: auto;
+    margin-left: auto;  
+    outline: none;  
+}
+
+div.stChatInput input:focus{
+    outline: none;  
+
+}
+
+
+.stChatMessage{
+    background-color: #1F1F24;
+    max-width: 70%;
+}
+
+[class*="st-key-user"]{
+
+    .stChatMessage{
+        background-color: #294A7B;
+        border-radius: 15px;
+        text-align: left;
+        flex-direction: row-reverse;
+
+        width: fit-content;
+        height: fit-content;
+        max-width: 70%;
+        position:relative;
+        justify-self: flex-end;
+        margin-left: auto;
+    }
+    
+}
