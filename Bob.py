@@ -19,12 +19,16 @@ def unique_message(name):
 
 MODEL = 'llama3.1:8b' #this is the model we are using
 
+#create our clear chat history function
+def clear_chat_history():
+    st.session_state.messages = [{"role": "system","content": config.SYSTEM_MESSAGE}]
+    st.session_state.messages.append({'role': 'assistant', 'content': 'Hello! I am Bob. Please let me know how I can best assist you today.'}) 
 
 st.sidebar.title("BOB A.I.")
 with st.sidebar:
     st.button("+New Chat", key="new_chat_button") #button to start a new chat
     file = st.file_uploader("Pick a file") #allows user to upload a file ..... this doesn't work yet, you can submit a file, but nothing happens
-    st.button("-Clear Chat History", key="clear_chat_button") #button to clear chat history
+    st.button("-Clear Chat History", key="clear_chat_button", on_click=clear_chat_history) #button to clear chat history
 
 
 #initializes the messages with the system prompt
@@ -69,6 +73,3 @@ if prompt:= st.chat_input("Type here", key="chat_input_styled"): #this text will
         stream = generate_response()
         response = st.write_stream(stream) #write the stream response
         st.session_state.messages.append({'role': 'assistant', 'content': response}) #append assitant response into content
-
-
-
