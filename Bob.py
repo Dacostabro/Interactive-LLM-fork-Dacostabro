@@ -2,6 +2,7 @@ import streamlit as st
 import ollama
 import config
 import uuid
+from collections import namedtuple
 
 st.set_page_config(layout="wide")
 
@@ -19,14 +20,36 @@ def unique_message(name):
 
 MODEL = 'llama3.1:8b' #this is the model we are using
 
+#declare our current chat tuple
+CHAT_TUPLE = namedtuple('CHAT_TUPLE', ['CHAT_NAME', 'CHAT_MESSAGES'])
+
+#create our initial chat tuple
+CHAT1 = CHAT_TUPLE('Chat 1', config.SYSTEM_MESSAGE)
+
+#create the variable for chat counter
+CHAT_COUNT = 1
+
+#create the variable for the current chats held with the chatbot
+CHATS = [CHAT1]
+
 #create our clear chat history function
 def clear_chat_history():
-    st.session_state.messages = [{"role": "system","content": config.SYSTEM_MESSAGE}]
-    st.session_state.messages.append({'role': 'assistant', 'content': 'Hello! I am Bob. Please let me know how I can best assist you today.'}) 
+    global CHATS
+    CHATS = [CHAT1]
+
+#create our new chat function
+def new_chat():
+    global CHAT_COUNT
+    CHAT_COUNT = CHAT_COUNT + 1
+    CHAT_NAME = "Chat " + str(CHAT_COUNT)
+    TEMP_CHAT = CHAT_TUPLE(CHAT_NAME, config.SYSTEM_MESSAGE)
+    CHATS.append(TEMP_CHAT)
+    
+
 
 st.sidebar.title("BOB A.I.")
 with st.sidebar:
-    st.button("+New Chat", key="new_chat_button") #button to start a new chat
+    st.button("+New Chat", key="new_chat_button", on_click=new_chat) #button to start a new chat
     file = st.file_uploader("Pick a file") #allows user to upload a file ..... this doesn't work yet, you can submit a file, but nothing happens
     st.button("-Clear Chat History", key="clear_chat_button", on_click=clear_chat_history) #button to clear chat history
 
