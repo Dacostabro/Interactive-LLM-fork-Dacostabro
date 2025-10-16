@@ -18,7 +18,7 @@ load_css("Styling/style.css")
 def unique_message(name):
     return st.container(key=f"{name}-{uuid.uuid4()}")
 
-MODEL = 'llama3.1:8b' #this is the model we are using
+MODEL = 'llava:7b' #this is the model we are using
 
 #declare our current chat tuple
 CHAT_TUPLE = namedtuple('CHAT_TUPLE', ['CHAT_NAME', 'CHAT_MESSAGES'])
@@ -40,6 +40,8 @@ def clear_chat_history():
 
     global CHAT_NAMES 
     CHAT_NAMES = ["Chat 1"]
+    st.session_state.chat_history = CHAT_NAMES
+
 
 #create our new chat function
 def new_chat():
@@ -48,6 +50,8 @@ def new_chat():
     CHAT_NAME = "Chat " + str(CHAT_COUNT)
     TEMP_CHAT = CHAT_TUPLE(CHAT_NAME, config.SYSTEM_MESSAGE)
     CHATS.append(TEMP_CHAT)
+
+    st.session_state.chat_history = CHAT_NAMES
 
     #list for the chat names (that will be displayed)
     CHAT_NAMES.append(CHAT_NAME)
