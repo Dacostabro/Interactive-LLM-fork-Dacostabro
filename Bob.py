@@ -3,6 +3,8 @@ import ollama
 import config
 import uuid
 from collections import namedtuple
+from pypdf import PdfReader
+
 
 st.set_page_config(layout="wide")
 
@@ -63,13 +65,19 @@ with st.sidebar:
     files_uploaded = st.file_uploader("Pick a file") #allows user to upload a file ..... this doesn't work yet, you can submit a file, but nothing happens
 
     if files_uploaded is not None: #if there are files that have been uploaded
-        #for file in files_uploaded: #for each file uploaded
-        file_contents = files_uploaded.read().decode("utf-8") #read and decode the file (put that in file data)
-        st.session_state.messages.append({'role': 'system', 'content': f"A file has been uploaded named: {files_uploaded.name} The contents of the file is: {file_contents}"}) #tell the assistant what the file is, but do not print this out
-        
-        #TEST
-        print(f"File uploaded successfully. File name: {files_uploaded.name} \n File Contents: {file_contents}") #THIS IS A TEST STATEMENT, DELETE LATER
-        #TEST
+
+        if files_uploaded.type == 'text/plain':
+            #for file in files_uploaded: #for each file uploaded
+            file_contents = files_uploaded.read().decode("utf-8") #read and decode the file (put that in file data)
+            st.session_state.messages.append({'role': 'system', 'content': f"A file has been uploaded named: {files_uploaded.name} The contents of the file is: {file_contents}"}) #tell the assistant what the file is, but do not print this out
+        elif files_uploaded.type == 'application/pdf':
+            file_contents = PdfReader(files_uploaded) #read and decode the file (put that in file data)
+            number_of_pages = len(file_contents.pages)
+            page = file_contents.pages[0]
+            file_text = page.extract_text()
+            st.session_state.messages.append({'role': 'system', 'content': f"A file has been uploaded named: {files_uploaded.name} The contents of the file is: {file_text}"}) #tell the assistant what the file is, but do not print this out
+        else:
+            print("There's an issue with finding the file type dawg")
 
 
     st.button("-Clear Chat History", key="clear_chat_button", on_click=clear_chat_history) #button to clear chat history
