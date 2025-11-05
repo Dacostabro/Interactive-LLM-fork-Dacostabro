@@ -35,6 +35,20 @@ This project is designed to give users privacy-first AI capabilities locally —
 
 ---
 
+## Contributors
+
+<a href="https://github.com/Dacostabro/Local-LLM/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Dacostabro/Local-LLM" />
+</a>
+
+- [@Dacostabro](https://github.com/Dacostabro)
+- [@Warsut](https://github.com/Warsut)
+- [@themoonsage](https://github.com/themoonsage)
+- [@ronaldior27](https://github.com/ronaldior27)
+- [@keana02330](https://github.com/keana02330)
+
+---
+
 ## 📦 Installation
 
 ```bash
