@@ -1,16 +1,36 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_data_files
+import os
+import pathlib
+import glob
+
+
+
+streamlit_root = "venv/lib/python3.9/site-packages/streamlit"
+
+streamlit_data = collect_data_files("streamlit")
+
+# add the prof images for user and assistant (include everything in the assets folder)
+for f in glob.glob("Assets/*"):
+    streamlit_data.append((f, "Assets"))
+
+streamlit_data += [
+    (os.path.join(streamlit_root, "web"), "streamlit/web"),
+    ("venv/lib/python3.9/site-packages/altair/vegalite/v5/schema/vega-lite-schema.json", "./altair/vegalite/v5/schema/"),
+    ("venv/lib/python3.9/site-packages/streamlit/static", "./streamlit/static"),
+    ("venv/lib/python3.9/site-packages/streamlit/runtime", "./streamlit/runtime"),
+    ("Bob.py", "."),
+    ("Styling/bobStyle.css", "Styling")
+]
+
 
 a = Analysis(
     ['run_Bob.py'],
     pathex=[],
     binaries=[],
-    datas=[
-        ("venv/lib/python3.9/site-packages/altair/vegalite/v5/schema/vega-lite-schema.json", "./altair/vegalite/v5/schema/"),
-        ("venv/lib/python3.9/site-packages/streamlit/static", "./streamlit/static"),
-        ("venv/lib/python3.9/site-packages/streamlit/runtime", "./streamlit/runtime"),
-    ],
-    hiddenimports=[],
+    datas=streamlit_data,
+    hiddenimports=["ollama", "config", "uuid", "pypdf"],
     hookspath=['./hooks'],
     hooksconfig={},
     runtime_hooks=[],
