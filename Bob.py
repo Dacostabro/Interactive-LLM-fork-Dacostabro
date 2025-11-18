@@ -156,6 +156,7 @@ if __name__ == "__main__":
             # Only update if it's not empty and actually changed
             if new_name.strip() and new_name != current_name:
                 st.session_state['CHAT_NAMES'][st.session_state.current_chat] = new_name
+                st.rerun()
 
         files_uploaded = st.file_uploader("Pick a file") #allows user to upload a file
 
