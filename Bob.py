@@ -237,11 +237,21 @@ if __name__ == "__main__":
     def generate_response():
         #only pass non-system messages (or the last few if context is long) 
         #for simplicity, we pass all messages including the hidden system prompt for now
+        messages_to_send = st.session_state.messages
         
         #create keyword arguments for the ollama.chat call
-        response = ollama.chat(model=MODEL, 
-                               stream=True, 
-                               messages=st.session_state.messages) #will get the response from the model
+        kwargs = {
+            'model': MODEL,
+            'stream': True,
+            'messages': messages_to_send
+        }
+        
+        if 'uploaded_image_bytes' in st.session_state:
+            kwargs['images'] = [st.session_state['uploaded_image_bytes']]
+            del st.session_state['uploaded_image_bytes']
+
+        #response = ollama.chat(model=MODEL, stream=True, messages=st.session_state.messages) #will get the response from the model
+        response = ollama.chat(**kwargs)
 
         st.session_state["full_message"] = "" #reset full message before generation
         for chunk in response:
