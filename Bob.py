@@ -261,7 +261,7 @@ if __name__ == "__main__":
             del st.session_state['uploaded_image_bytes']
 
         #response = ollama.chat(model=MODEL, stream=True, messages=st.session_state.messages) #will get the response from the model
-        response = ollama.chat(**kwards)
+        response = ollama.chat(**kwargs)
 
         st.session_state["full_message"] = "" #reset full message before generation
         for chunk in response:
