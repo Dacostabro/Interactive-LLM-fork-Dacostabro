@@ -158,8 +158,7 @@ if __name__ == "__main__":
                 st.session_state['CHAT_NAMES'][st.session_state.current_chat] = new_name
                 st.rerun()
 
-        files_uploaded = st.file_uploader("Pick a file", 
-                                          type = ['txt', 'pdf', 'docx','csv','json','png','jpg','jpeg']) #allows user to upload a file
+        files_uploaded = st.file_uploader("Pick a file") #allows user to upload a file
 
         if files_uploaded is not None: #if there is a file that have been uploaded
 
@@ -192,35 +191,6 @@ if __name__ == "__main__":
                         }
                     ) #tell the assistant what the file is, but do not print this out
             
-            elif files_uploaded.type == 'text/csv':
-                import pandas as pd #requires pip install pandas
-                df = pd.read_csv(files_uploaded)
-                file_contents = df.to_markdown(index = False)
-
-                st.session_state.messages.append(
-                    {
-                        'role' : 'system',
-                        'content' : f"A file has been uploaded named: {files_uploaded.name} \n"
-                                    f"The contents of the CSV  file are: \n {file_contents}"
-                    }
-                )
-
-            elif files_uploaded.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                from docx import Document #required pip install python-docx
-
-                document = Document(files_uploaded)
-                file_contents = ""
-                for paragraph in document.paragraphs:
-                    file_contents += paragraph.text + "\n"
-
-                st.session_state.messages.append(
-                    {
-                        'role': 'system',
-                        'content': f"A file has been uploaded named: {files_uploaded.name} \n"
-                                    f"The contents of the Word document are: \n{file_contents}"
-                    }
-                )
-
             else:
                 print("There's an issue with finding the file type dawg")
                 st.session_state.messages.append(
@@ -237,21 +207,7 @@ if __name__ == "__main__":
     def generate_response():
         #only pass non-system messages (or the last few if context is long) 
         #for simplicity, we pass all messages including the hidden system prompt for now
-        messages_to_send = st.session_state.messages
-        
-        #create keyword arguments for the ollama.chat call
-        kwargs = {
-            'model': MODEL,
-            'stream': True,
-            'messages': messages_to_send
-        }
-        
-        if 'uploaded_image_bytes' in st.session_state:
-            kwargs['images'] = [st.session_state['uploaded_image_bytes']]
-            del st.session_state['uploaded_image_bytes']
-
-        #response = ollama.chat(model=MODEL, stream=True, messages=st.session_state.messages) #will get the response from the model
-        response = ollama.chat(**kwargs)
+        response = ollama.chat(model=MODEL, stream=True, messages=st.session_state.messages) #will get the response from the model
 
         st.session_state["full_message"] = "" #reset full message before generation
         for chunk in response:
